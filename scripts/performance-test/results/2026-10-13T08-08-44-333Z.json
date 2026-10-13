@@ -1,0 +1,65 @@
+{
+  "environment": {
+    "date": "2026-10-13T08:08:44.333Z",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.80GHz × 2",
+    "memoryGb": 8,
+    "os": "Linux 6.18.44-fc-v114",
+    "node": "v22.22.0",
+    "mysql": "8.0.46-0ubuntu0.24.04.4",
+    "redis": "7.0.15",
+    "connections": 50,
+    "durationSeconds": 10,
+    "dbPoolSize": 20,
+    "note": "API, MySQL, Redis and the load generator all ran on the same machine."
+  },
+  "table": [
+    {
+      "scenario": "A_detail_cached",
+      "req/s (avg)": 1559,
+      "p50 ms": 27,
+      "p90 ms": 46,
+      "p99 ms": 68,
+      "max ms": 611,
+      "requests": 15594,
+      "2xx": 15594,
+      "non-2xx": 0,
+      "errors": 0
+    },
+    {
+      "scenario": "B_detail_uncached",
+      "req/s (avg)": 721,
+      "p50 ms": 67,
+      "p90 ms": 87,
+      "p99 ms": 110,
+      "max ms": 668,
+      "requests": 7210,
+      "2xx": 7210,
+      "non-2xx": 0,
+      "errors": 0
+    },
+    {
+      "scenario": "C_bids_spread",
+      "req/s (avg)": 149,
+      "p50 ms": 321,
+      "p90 ms": 415,
+      "p99 ms": 673,
+      "max ms": 809,
+      "requests": 1489,
+      "2xx": 1464,
+      "non-2xx": 25,
+      "errors": 0
+    },
+    {
+      "scenario": "D_bids_hot",
+      "req/s (avg)": 76,
+      "p50 ms": 649,
+      "p90 ms": 703,
+      "p99 ms": 757,
+      "max ms": 812,
+      "requests": 758,
+      "2xx": 732,
+      "non-2xx": 26,
+      "errors": 0
+    }
+  ]
+}

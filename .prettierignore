@@ -1,0 +1,6 @@
+node_modules
+dist
+coverage
+backend/prisma/migrations
+package-lock.json
+*.svg
