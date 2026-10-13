@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+@import '@fontsource/spectral/400.css';
+@import '@fontsource/spectral/500.css';
+@import '@fontsource/spectral/600.css';
+@import '@fontsource/spectral/400-italic.css';
+@import '@fontsource-variable/public-sans';
+
+/*
+ * Auctra design tokens.
+ * Saleroom vernacular: porcelain walls, baize-green tables, brass for the leading bid.
+ * Brass is reserved for "you are leading" and the new-bid flash — nowhere else.
+ */
+@theme {
+  --color-porcelain: #f5f6f4;
+  --color-paper: #ffffff;
+  --color-ink: #1a1f1c;
+  --color-ink-soft: #3b423e;
+  --color-muted: #6b736e;
+  --color-line: #dadDd8;
+  --color-line-strong: #c4c9c3;
+  --color-baize: #1f4d3f;
+  --color-baize-deep: #163a2f;
+  --color-baize-tint: #e3ece8;
+  --color-brass: #b8913a;
+  /* Chart series colour (validated: lightness band, chroma floor, contrast on paper). */
+  --color-chart: #1e8462;
+  --color-brass-tint: #f4ecd9;
+  --color-outbid: #b3432f;
+  --color-outbid-tint: #f6e4df;
+  --color-focus: #2d6cdf;
+
+  --font-serif: 'Spectral', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Public Sans Variable', 'Public Sans', system-ui, sans-serif;
+
+  /* Type scale (1.25 ratio from 16px) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+  --text-4xl: 3.052rem;
+  --text-5xl: 3.815rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --animate-flash: flash 1.6s ease-out;
+}
+
+@keyframes flash {
+  0% { background-color: var(--color-brass-tint); }
+  100% { background-color: transparent; }
+}
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { @apply bg-porcelain text-ink font-sans; font-size: 1rem; line-height: 1.55; }
+  h1, h2, h3 { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; }
+  /* Visible keyboard focus everywhere; mouse clicks do not show the ring. */
+  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: var(--color-baize-tint); }
+  .tabular { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1, 'lnum' 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

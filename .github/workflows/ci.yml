@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Runs the same checks as `npm run lint && npm run typecheck && npm run test:all && npm run build`,
+# with REAL MySQL 8 and Redis 7 service containers — the concurrency tests need genuine row locks.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: auctra_test
+          MYSQL_USER: auctra
+          MYSQL_PASSWORD: auctra_dev_password
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+      redis:
+        image: redis:7.4-alpine
+        ports: ['6379:6379']
+        options: --health-cmd="redis-cli ping" --health-interval=5s --health-timeout=3s --health-retries=20
+    env:
+      NODE_ENV: test
+      DATABASE_URL: mysql://auctra:auctra_dev_password@127.0.0.1:3306/auctra_test
+      TEST_DATABASE_URL: mysql://auctra:auctra_dev_password@127.0.0.1:3306/auctra_test
+      REDIS_URL: redis://127.0.0.1:6379/15
+      TEST_REDIS_URL: redis://127.0.0.1:6379/15
+      JWT_ACCESS_SECRET: ci-only-secret-ci-only-secret-0123456789abcdef
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Grant test user DDL rights
+        run: mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON *.* TO 'auctra'@'%'; FLUSH PRIVILEGES;"
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:unit
+      - run: npm run test:integration
+      - run: npm run test:concurrency
+      - run: npm run test -w frontend
+      - run: npm run build

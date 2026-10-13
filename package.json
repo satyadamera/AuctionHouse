@@ -1,0 +1,40 @@
+{
+  "name": "auctra",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Auctra — real-time online auction platform (React, Node.js, MySQL, Redis, Socket.IO)",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:dev -w backend\" \"npm:dev -w frontend\"",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "test": "npm run test:unit -w backend && npm run test -w frontend",
+    "test:unit": "npm run test:unit -w backend",
+    "test:integration": "npm run test:integration -w backend",
+    "test:concurrency": "npm run test:concurrency -w backend",
+    "test:all": "npm run test:unit -w backend && npm run test:integration -w backend && npm run test:concurrency -w backend && npm run test -w frontend",
+    "test:e2e": "npm run test:e2e -w frontend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:deploy": "npm run db:deploy -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "db:reset": "npm run db:reset -w backend",
+    "lint": "npm run lint -w backend && npm run lint -w frontend",
+    "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend",
+    "format": "prettier --write .",
+    "demo:race": "npm run demo:race -w backend",
+    "demo:cache": "npm run demo:cache -w backend",
+    "demo:lifecycle": "npm run demo:lifecycle -w backend",
+    "bench": "npm run bench -w backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5",
+    "prettier": "^3.9.10"
+  }
+}
