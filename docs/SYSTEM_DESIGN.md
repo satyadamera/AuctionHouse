@@ -67,10 +67,10 @@ sequenceDiagram
   participant V as Viewers
   U->>API: POST /auctions/42/bids {amount, clientRequestId}
   API->>API: authenticate, rate limit, validate
-  API->>DB: BEGIN; SELECT … FOR UPDATE (+ UTC_TIMESTAMP)
+  API->>DB: BEGIN, SELECT … FOR UPDATE (with UTC_TIMESTAMP)
   API->>DB: idempotency lookup
   API->>API: rules on locked row
-  API->>DB: INSERT bid; UPDATE auction (version+1)
+  API->>DB: INSERT bid, UPDATE auction (version+1)
   API->>DB: INSERT notifications, outbox, audit
   API->>DB: COMMIT
   API->>R: invalidate (versioned)

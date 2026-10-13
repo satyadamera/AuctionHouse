@@ -126,12 +126,13 @@ refreshes it. Joining a DRAFT auction room requires being its seller or an admin
 ```mermaid
 sequenceDiagram
   participant A as Bidder A (REST)
+  participant B as Bidder B (watching)
   participant API
   participant DB as MySQL
   participant D as Outbox dispatcher
   participant Room as Room auction:42
   A->>API: POST /bids
-  API->>DB: tx: bid + summary + outbox rows; COMMIT
+  API->>DB: tx: bid + summary + outbox rows, COMMIT
   API-->>A: 201 (A updates its own UI from the response)
   API->>D: wake()
   D->>DB: SELECT … FOR UPDATE SKIP LOCKED (unprocessed)

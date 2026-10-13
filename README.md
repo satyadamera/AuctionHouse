@@ -114,7 +114,7 @@ flowchart LR
   OD -- "claim committed events" --> DB
   OD -- emit --> IO
   OD -- invalidate --> R
-  IO <-- "WebSocket" --> SC
+  IO <-->|WebSocket| SC
 ```
 
 Folder layout:
@@ -195,9 +195,9 @@ sequenceDiagram
   participant DB as MySQL
   A->>API: POST /bids
   B->>API: POST /bids
-  API->>DB: BEGIN; SELECT … FOR UPDATE (A)
+  API->>DB: BEGIN, SELECT … FOR UPDATE (A)
   DB-->>API: row locked for A (highest ₹10,000)
-  API->>DB: BEGIN; SELECT … FOR UPDATE (B)
+  API->>DB: BEGIN, SELECT … FOR UPDATE (B)
   Note over DB: B waits — row is locked by A
   API->>DB: A: INSERT bid, UPDATE auction v+1, outbox rows
   API->>DB: COMMIT (A)
@@ -227,10 +227,38 @@ erDiagram
   auctions ||--o{ bids : receives
   auctions ||--o{ watchlist : "watched in"
   auctions |o--o| users : "current_highest_bidder / winner"
-  users { int id PK; varchar email UK; enum role; enum status }
-  auctions { int id PK; int seller_id FK; decimal current_highest_bid; int current_highest_bidder_id FK; decimal minimum_bid_increment; datetime end_time; enum status; int winner_id FK; int version }
-  bids { int id PK; int auction_id FK; int bidder_id FK; decimal amount; varchar client_request_id }
-  outbox_events { bigint id PK; char event_id UK; varchar type; int version; json payload; datetime processed_at }
+  users {
+    int id PK
+    varchar email UK
+    enum role
+    enum status
+  }
+  auctions {
+    int id PK
+    int seller_id FK
+    decimal current_highest_bid
+    int current_highest_bidder_id FK
+    decimal minimum_bid_increment
+    datetime end_time
+    enum status
+    int winner_id FK
+    int version
+  }
+  bids {
+    int id PK
+    int auction_id FK
+    int bidder_id FK
+    decimal amount
+    varchar client_request_id
+  }
+  outbox_events {
+    bigint id PK
+    char event_id UK
+    varchar type
+    int version
+    json payload
+    datetime processed_at
+  }
 ```
 
 Key points (details in [docs/DATABASE.md](docs/DATABASE.md)):
