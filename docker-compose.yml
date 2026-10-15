@@ -5,7 +5,7 @@ services:
   mysql:
     image: mysql:8.4
     container_name: auctra-mysql
-    restart: unless-stopped
+    restart: no
     environment:
       MYSQL_ROOT_PASSWORD: auctra_root_dev
       MYSQL_DATABASE: auctra
@@ -32,7 +32,7 @@ services:
   redis:
     image: redis:7.4-alpine
     container_name: auctra-redis
-    restart: unless-stopped
+    restart: no
     command: ['redis-server', '--appendonly', 'no', '--maxmemory', '256mb', '--maxmemory-policy', 'allkeys-lru']
     ports:
       - '6380:6379'
